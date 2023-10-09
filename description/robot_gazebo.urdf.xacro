@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+
+
+  <material name="white">
+    <color rgba="1 1 1 1" />
+  </material>
+
+  <material name="blue">
+    <color rgba="0.2 0.2 1 1" />
+  </material>
+
+  <material name="gray">
+    <color rgba="0.3 0.3 0.3 1" />
+  </material>
+
+  <gazebo reference="frame">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="left_front_wheel">
+    <material>Gazebo/Gray</material>
+    <mu1 value='1' />
+    <mu2 value='1' />
+  </gazebo>
+
+  <gazebo reference="left_rear_wheel">
+    <material>Gazebo/Gray</material>
+    <mu1 value='1' />
+    <mu2 value='1' />
+  </gazebo>
+
+  <gazebo reference="right_front_wheel">
+    <material>Gazebo/Gray</material>
+    <mu1 value='1' />
+    <mu2 value='1' />
+  </gazebo>
+
+  <gazebo reference="right_rear_wheel">
+    <material>Gazebo/Gray</material>
+    <mu1 value='1' />
+    <mu2 value='1' />
+  </gazebo>
+
+  <gazebo reference="left_rear_wheel" >
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>            
+    <minDepth>0.0</minDepth>
+    <maxContacts>1</maxContacts>
+  </gazebo>
+
+  <gazebo reference="right_rear_wheel" >
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>            
+    <minDepth>0.0</minDepth>
+    <maxContacts>1</maxContacts>
+  </gazebo>
+
+  <gazebo reference="left_front_wheel" >
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>            
+    <minDepth>0.0</minDepth>
+    <maxContacts>1</maxContacts>
+  </gazebo>
+
+  <gazebo reference="right_front_wheel" >
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>            
+    <minDepth>0.0</minDepth>
+    <maxContacts>1</maxContacts>
+  </gazebo>
+
+
+
+
+
+
+</robot>

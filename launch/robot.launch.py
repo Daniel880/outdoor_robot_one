@@ -56,9 +56,10 @@ def generate_launch_description():
                 [FindPackageShare("outdoor_robot_one"), "description", "robot.urdf.xacro"]
             ),
             " ",
-            "sim_mode:=true",
+            "sim_mode:=false",
         ]
     )
+
     robot_description = {"robot_description": robot_description_content}
 
     robot_controllers = PathJoinSubstitution(
@@ -118,12 +119,12 @@ def generate_launch_description():
                                    '-entity', 'robot'],
                         output='screen')
     nodes = [
-        gazebo,
-        spawn_entity,
+        # gazebo,
+        # spawn_entity,
         robot_state_pub_node,
-        # controller_manager_node
+        controller_manager_node,
         rviz_node,
         joint_state_broadcaster_spawner,
-        robot_controller_spawner
+        robot_controller_spawner,
     ]
     return LaunchDescription(declared_arguments + nodes)
