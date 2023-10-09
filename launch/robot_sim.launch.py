@@ -28,15 +28,24 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
+
+    world_path = PathJoinSubstitution(
+        [
+            FindPackageShare("outdoor_robot_one"),
+            "worlds",
+            'mcmillan_airfield.world',
+        ]
+    )
+    
     # Declare arguments
     declared_arguments = []
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "gui",
-    #         default_value="true",
-    #         description="Start RViz2 automatically with this launch file.",
-    #     )
-    # )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "world",
+            default_value=world_path,
+            description="Start RViz2 automatically with this launch file.",
+        )
+    )
     # declared_arguments.append(
     #     DeclareLaunchArgument(
     #         "use_mock_hardware",
@@ -107,7 +116,7 @@ def generate_launch_description():
         executable="spawner",
         arguments=["diff_drive_controller", "--controller-manager", "/controller_manager"],
     )
-
+    
     gazebo = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([os.path.join(
                 get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
