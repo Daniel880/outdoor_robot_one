@@ -65,7 +65,7 @@ def generate_launch_description():
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("outdoor_robot_one"),
-            "config",
+            "controller",
             "ros2_controllers.yaml",
         ]
     )
