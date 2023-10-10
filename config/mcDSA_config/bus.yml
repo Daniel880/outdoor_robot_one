@@ -41,6 +41,12 @@ defaults:
       mapping:
         - {index: 0x4A04, sub_index: 2}       # Measured velocity in [rpm]
         - {index: 0x6077, sub_index: 0}       # Torque - actual value
+    3:
+      enabled: true
+      cob_id: "auto"
+      transmission: 0x01
+      mapping:
+        - {index: 0x4262, sub_index: 2}       # current
   rpdo: 
     1:
       enabled: true
