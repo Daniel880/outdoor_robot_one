@@ -17,26 +17,36 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler, IncludeLaunchDescription
+from launch.actions import GroupAction, DeclareLaunchArgument, RegisterEventHandler, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
-from launch_ros.actions import Node
+from launch_ros.actions import Node, SetRemap
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
+    world_path = PathJoinSubstitution(
+        [
+            FindPackageShare("outdoor_robot_one"),
+            "worlds",
+            'mcmillan_airfield.world',
+        ]
+    )
+    
     # Declare arguments
     declared_arguments = []
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "gui",
-    #         default_value="true",
-    #         description="Start RViz2 automatically with this launch file.",
-    #     )
-    # )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "world",
+            default_value=world_path,
+            description="Start RViz2 automatically with this launch file.",
+        )
+    )
+    
     # declared_arguments.append(
     #     DeclareLaunchArgument(
     #         "use_mock_hardware",
@@ -56,7 +66,7 @@ def generate_launch_description():
                 [FindPackageShare("outdoor_robot_one"), "description", "robot.urdf.xacro"]
             ),
             " ",
-            "sim_mode:=false",
+            "sim_mode:=true",
         ]
     )
 
@@ -65,7 +75,7 @@ def generate_launch_description():
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("outdoor_robot_one"),
-            "controller",
+            "configuration",
             "ros2_controllers.yaml",
         ]
     )
@@ -118,6 +128,72 @@ def generate_launch_description():
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'robot'],
                         output='screen')
+    
+
+    rl_params_file = os.path.join(get_package_share_directory("outdoor_robot_one"), 'configuration', 'dual_ekf_navsat_params.yaml')
+
+    navsat_transform_node = Node(
+        package="robot_localization",
+        executable="navsat_transform_node",
+        name="navsat_transform",
+        output="screen",
+        parameters=[rl_params_file],
+        remappings=[
+            ("imu", "mavros/imu/data"),
+            ("gps/fix", "gps/fix"),
+            ("gps/filtered", "gps/filtered"),
+            ("odometry/gps", "odometry/gps"),
+            ("odometry/filtered", "odometry/global"),
+        ],
+    )
+
+    ekf_filter_node_odom = Node(
+        package="robot_localization",
+        executable="ekf_node",
+        name="ekf_filter_node_odom",
+        output="screen",
+        parameters=[rl_params_file],
+        remappings=[("odometry/filtered", "odometry/local")],
+    )
+
+    ekf_filter_node_map = Node(
+                package="robot_localization",
+                executable="ekf_node",
+                name="ekf_filter_node_map",
+                output="screen",
+                parameters=[rl_params_file],
+                remappings=[("odometry/filtered", "odometry/global")],
+            )
+    
+
+    nav2_params = os.path.join(get_package_share_directory("outdoor_robot_one"), 'configuration', 'nav2_no_map_params.yaml')
+    
+    nav_include = GroupAction(
+        actions=[
+
+            SetRemap(src='/cmd_vel',dst='/diff_drive_controller/cmd_vel_unstamped'),
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(                
+                    os.path.join(get_package_share_directory('nav2_bringup'), "launch", "navigation_launch.py")
+                    ),
+            launch_arguments={
+                "use_sim_time": "false",
+                "params_file": nav2_params,
+                "autostart": "True",
+            }.items(),
+
+            )
+        ]
+    )
+
+    apm_node = IncludeLaunchDescription(
+        XMLLaunchDescriptionSource(     [        
+            os.path.join(get_package_share_directory('outdoor_robot_one'), "launch", "apm.launch")
+            ])
+        )
+
+
     nodes = [
         # gazebo,
         # spawn_entity,
@@ -126,5 +202,10 @@ def generate_launch_description():
         rviz_node,
         joint_state_broadcaster_spawner,
         robot_controller_spawner,
+        navsat_transform_node,
+        ekf_filter_node_odom,
+        ekf_filter_node_map,
+        # nav_include, 
+        apm_node
     ]
     return LaunchDescription(declared_arguments + nodes)

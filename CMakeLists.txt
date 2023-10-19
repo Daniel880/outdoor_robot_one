@@ -11,7 +11,7 @@ find_package(lely_core_libraries REQUIRED)
 cogen_dcf(mcDSA_config)
 
 install(
-  DIRECTORY description launch worlds rviz controller
+  DIRECTORY description launch worlds rviz configuration 
   DESTINATION share/${PROJECT_NAME}
 )
 
