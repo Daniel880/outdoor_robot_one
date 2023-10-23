@@ -17,7 +17,9 @@
     plugin_allowlist:
       - 'sys_*'
       - imu
-      # - 'gps*'
+      - 'gps*'
+      - global_position
+      # - actuator_control
       # - fake_gps
       # - local_position
       # - odometry
