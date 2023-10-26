@@ -66,7 +66,7 @@ def generate_launch_description():
                 [FindPackageShare("outdoor_robot_one"), "description", "robot.urdf.xacro"]
             ),
             " ",
-            "sim_mode:=true",
+            "sim_mode:=false",
         ]
     )
 
@@ -193,19 +193,18 @@ def generate_launch_description():
             ])
         )
 
-
     nodes = [
         # gazebo,
         # spawn_entity,
         robot_state_pub_node,
         controller_manager_node,
-        rviz_node,
+        # rviz_node,
         joint_state_broadcaster_spawner,
         robot_controller_spawner,
-        navsat_transform_node,
+        # navsat_transform_node,
         ekf_filter_node_odom,
-        ekf_filter_node_map,
+        # ekf_filter_node_map,
         # nav_include, 
-        apm_node
+        apm_node,
     ]
     return LaunchDescription(declared_arguments + nodes)

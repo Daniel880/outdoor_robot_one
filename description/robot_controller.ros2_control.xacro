@@ -7,7 +7,7 @@
         <plugin>canopen_ros2_control/RobotSystem</plugin>
         <param name="bus_config">$(find outdoor_robot_one)/config/mcDSA_config/bus.yml</param>
         <param name="master_config">$(find outdoor_robot_one)/config/mcDSA_config/master.dcf</param>
-        <param name="can_interface_name">can0</param>
+        <param name="can_interface_name">can2</param>
         <param name="master_bin">""</param>
       </hardware>
       <joint name="left_rear_wheel_joint">
