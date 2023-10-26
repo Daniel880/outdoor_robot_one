@@ -138,4 +138,17 @@
   </xacro:inertial_cylinder>
   </link>
 
+
+  <joint name="camera_mount_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="camera_mount_link" />
+    <origin xyz="0.32 0 0.18" />
+  </joint>
+
+
+  <link name="camera_mount_link" />
+  <xacro:sensor_d455 parent="camera_mount_link" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:sensor_d455>
+
 </robot>

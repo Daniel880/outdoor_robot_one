@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="robot">
+
+    <xacro:arg name="use_nominal_extrinsics" default="false"/>
+    <xacro:include filename="$(find realsense2_description)/urdf/_d455.urdf.xacro" />
+
     <xacro:include filename="$(find outdoor_robot_one)/description/inertial_macros.xacro"/>
     <xacro:include filename="$(find outdoor_robot_one)/description/robot_gazebo.urdf.xacro"/>
-
     <xacro:include filename="$(find outdoor_robot_one)/description/robot_core.urdf.xacro"/>
-
     <xacro:include filename="$(find outdoor_robot_one)/description/robot_controller.ros2_control.xacro"/>
     
 </robot>
