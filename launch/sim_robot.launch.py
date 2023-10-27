@@ -202,10 +202,10 @@ def generate_launch_description():
         rviz_node,
         joint_state_broadcaster_spawner,
         robot_controller_spawner,
-        navsat_transform_node,
-        ekf_filter_node_odom,
-        ekf_filter_node_map,
-        nav_include, 
+        # navsat_transform_node,
+        # ekf_filter_node_odom,
+        # ekf_filter_node_map,
+        # nav_include, 
         # apm_node
     ]
     return LaunchDescription(declared_arguments + nodes)
